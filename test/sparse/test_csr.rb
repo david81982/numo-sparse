@@ -38,5 +38,19 @@ class TestSparseCSR < Test::Unit::TestCase
                      csr.nnz)
       end
     end
+
+    sub_test_case("with Numo::NArray object") do
+      test("with 2D array") do
+        nary = Numo::DFloat[[0, 0, 5], [1, 0, 1], [1, 0, 0]]
+        csr = Numo::Sparse::CSR.new(nary)
+		
+        assert_equal([3,3],
+                     csr.shape)
+        assert_equal(2,
+                     csr.ndim)
+        assert_equal(4,
+                     csr.nnz)
+      end
+    end
   end
 end
