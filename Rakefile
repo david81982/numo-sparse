@@ -5,4 +5,4 @@ task :test do
 	ruby "test/run_test.rb"
 end
 
-task :default :test
+task :default: :test
