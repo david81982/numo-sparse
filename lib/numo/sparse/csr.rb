@@ -15,8 +15,7 @@ module Numo
         @shape = check_shape(narray.shape).dup.freeze
         @dtype = narray.class
         @data = narray[narray.ne(0)]
-        csrmask = narray.ne(0)
-		@csrds = make_csrd(mask)
+		#index creation
       end
 
       private def initialize_empty(shape, dtype)
@@ -51,6 +50,7 @@ module Numo
 	  
 	  
 	  =begin #This is a draft for converting a csr matrix back to normal
+	  
 	  private def to_regular_matrix()
 		t, a, c, d, tempor, i = 0, 0, 0, 0, 0, 1	#initialization
 		
@@ -68,6 +68,7 @@ module Numo
 			a = 0
 		end
 	  end
+	  
 	  =end
 	  
     end
