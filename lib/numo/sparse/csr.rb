@@ -25,9 +25,9 @@ module Numo
       end
 	  
 	  #draft of the conversion of regular matrix to csr
-	  private def to_csr(shape, data)
+	  private def to_csr(rows, columns,  data)
 		#initialization
-		I, J, matrix = shape[i], shape[j], data
+		I, J, matrix = rows, columns, data
 		A, B = 0, 0
 		data = []
 		indptr = []
@@ -49,27 +49,27 @@ module Numo
 	  end
 	  
 	  
-	  =begin This is a draft for converting a csr matrix back to normal
+	  #begin This is a draft for converting a csr matrix back to normal
 	  
-	  private def to_regular_matrix()
-		t, a, c, d, tempor, i = 0, 0, 0, 0, 0, 1	
+	  #private def to_regular_matrix()
+		#t, a, c, d, tempor, i = 0, 0, 0, 0, 0, 1	
 		
-		while t < (indptr.length() - 1)	 Create a limit for the rows
-			tempor = (indptr.at[i] - indptr.at[i-1] 	number of non-zero values in the row
-			while a < tempor 	#assign the data to their positions
-				matrix.at[t][indices.at[c]] = data.at[d] 	find the correct position and input the correct values
-				TODO: correct the matrix.at[]
-				c += 1
-				d += 1
-				a += 1
-			end
-			i += 1
-			t += 1
-			a = 0
-		end
-	  end
+		#while t < (indptr.length() - 1)	 Create a limit for the rows
+			#tempor = (indptr.at[i] - indptr.at[i-1] 	number of non-zero values in the row
+			#while a < tempor 	#assign the data to their positions
+				#matrix.at[t][indices.at[c]] = data.at[d] 	find the correct position and input the correct values
+				#TODO: correct the matrix.at[]
+				#c += 1
+				#d += 1
+				#a += 1
+			#end
+			#i += 1
+			#t += 1
+			#a = 0
+		#end
+	  #end
 	  
-	  =end
+	  #end
 	  
     end
   end
