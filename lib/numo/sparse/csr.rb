@@ -47,6 +47,7 @@ module Numo
 			end
 			indptr.push(count) 
 		end
+	  end
 	  
 	  
 	  =begin #This is a draft for converting a csr matrix back to normal
