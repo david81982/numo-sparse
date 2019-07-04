@@ -27,21 +27,21 @@ module Numo
 	  #draft of the conversion of regular matrix to csr
 	  private def to_csr(rows, columns,  data)
 		#initialization
-		I, J, matrix = rows, columns, data
-		A, B = 0, 0
+		i, j, matrix = rows, columns, data
+		a, b = 0, 0
 		data = []
 		indptr = []
 		count = []
-		count.at[I] = 0
-		I += 1
+		count.at[i] = 0
+		i += 1
 		
 		#start of the code itself
-		while A < 2
-			while B < 2
+		while a < 2
+			while b < 2
 				if (matrix.at[i][j] != 0)
 					count += 1
-					data.push=(matrix.at[I][J])
-					indices.push(J)
+					data.push=(matrix.at[i][j])
+					indices.push(j)
 				end
 			end
 			indptr.push(count) 
