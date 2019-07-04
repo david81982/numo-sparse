@@ -49,15 +49,15 @@ module Numo
 	  end
 	  
 	  
-	  =begin #This is a draft for converting a csr matrix back to normal
+	  =begin This is a draft for converting a csr matrix back to normal
 	  
 	  private def to_regular_matrix()
-		t, a, c, d, tempor, i = 0, 0, 0, 0, 0, 1	#initialization
+		t, a, c, d, tempor, i = 0, 0, 0, 0, 0, 1	
 		
-		while t < (indptr.length() - 1)	 #Create a limit for the rows
-			tempor = (indptr.at[i] - indptr.at[i-1] 	#number of non-zero values in the row
+		while t < (indptr.length() - 1)	 Create a limit for the rows
+			tempor = (indptr.at[i] - indptr.at[i-1] 	number of non-zero values in the row
 			while a < tempor 	#assign the data to their positions
-				matrix.at[t][indices.at[c]] = data.at[d] 	#find the correct position and input the correct values
+				matrix.at[t][indices.at[c]] = data.at[d] 	find the correct position and input the correct values
 				TODO: correct the matrix.at[]
 				c += 1
 				d += 1
