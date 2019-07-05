@@ -40,7 +40,7 @@ class TestSparseCSR < Test::Unit::TestCase
     end
 	
 	sub_test_case("with Numo::NArray object") do
-	  test("with 2D array 2") do
+	  test("with 2D array and coords") do
 	    naray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
 		csr = Numo::Sparse::CSR.new(naray)
 			
@@ -57,7 +57,7 @@ class TestSparseCSR < Test::Unit::TestCase
                        [0, 2, 2, 0, 1, 2],
                        [0, 2, 3, 6]
 					 ],
-csr.results) #TODO correct blank
+csr.coords)
 	  end
 	end
   end
