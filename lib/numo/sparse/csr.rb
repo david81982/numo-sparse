@@ -18,6 +18,7 @@ module Numo
         @dtype = narray.class
         @data = narray[narray.ne(0)]
         @coords = make_coords(narray) #####
+        @matrix = to_matrix(narray)
       end
 
       private def initialize_empty(shape, dtype)
@@ -47,26 +48,28 @@ module Numo
         [data, indices, indptr]
       end
       
-#This is a test for converting a csr matrix back to normal
-      private def to_reg_matrix(shape, dtype, coords)
-        matrix = initialize_empty(shape, dtype)
-        data, indices, indptr = coords[0], coords[1], coords[2]
-        t, a, c, d, tempor, i = 0, 0, 0, 0, 0, 1
+      private def to_matrix(coords)
+        matrix = Numo::DFloat.zeros(shape)
+     
+        data, indices, indptr = 
+        coords[0], coords[1], coords[2]
+        
+        t, a, c, d, tempor, i = 
+        0, 0, 0, 0, 0, 1
 
-        while t < (indptr.length - 1)     #Create a limit for the rows
-          tempor = (indptr[i] - indptr[i-1])    #number of non-zero values in the row
-          while a < tempor     #assign the data to their positions
-              matrix[t][indices[c]] = data[d]  #find the correct position and input the correct values
-              #TODO: correct the matrix[]
+        while t < (indptr.size - 1)
+          tempor = (indptr[i] - indptr[i-1])
+          while a < tempor
+              matrix[t][indices[c]] = data[d]
               c += 1
               d += 1
               a += 1
-            end
+          end
           i += 1
           t += 1
           a = 0
         end
-      matrix
+      [matrix]
       end
     end
   end

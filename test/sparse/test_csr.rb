@@ -61,23 +61,21 @@ class TestSparseCSR < Test::Unit::TestCase
       end
     end
     
-#This is a test for converting a csr matrix back to normal
-    sub_test_case("with shape, dtype class, and coords") do
-      test("normal case") do
-        csr = Numo::Sparse::CSR.new([2, 3], Numo::DFloat, [1, 2, 3, 4, 5, 6],
+    sub_test_case("with Numo::NArray object") do
+      test("with coords") do
+        naray = [1, 2, 3, 4, 5, 6],
                        [0, 2, 2, 0, 1, 2],
-                       [0, 2, 3, 6])
+                       [0, 2, 3, 6]
+        csr = Numo::Sparse::CSR.new(naray)
 
-        assert_equal([2, 3],
+        assert_equal([3, 3],
                      csr.shape)
         assert_equal(2,
                      csr.ndim)
         assert_equal(6,
                      csr.nnz)
-        assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6], 
-                     csr.data)
         assert_equal([
-                       Numo::DFloat[1, 0, 2],
+                       [1, 0, 2],
                        [0, 0, 3],
                        [4, 5, 6]
                      ],
