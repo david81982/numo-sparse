@@ -4,7 +4,7 @@ module Numo
   module Sparse
     class CSR < BaseTensor
       attr_reader :shape, :dtype, :data, :indptr, :indices
-      
+
       def self.max_ndim
         2
       end
@@ -25,17 +25,17 @@ module Numo
         @dtype = check_dtype(dtype)
         @data = []
       end
-      
+
       private def make_csr(narray)
-        row_limit, col_limit, matrix, curr_row, count = 
-        shape[0], shape[1], narray, 0, 0
+        row_limit, col_limit = shape[0], shape[1]
+        matrix, curr_row, count = narray, 0, 0
         indices = []
         indptr = []
         indptr[0] = 0
         while curr_row < row_limit
           curr_col = 0
           while curr_col < col_limit
-            if (matrix[curr_row,curr_col] != 0)
+            if matrix[curr_row,curr_col] != 0
               count += 1
               indices.push(curr_col)
             end
