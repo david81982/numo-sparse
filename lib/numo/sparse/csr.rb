@@ -3,7 +3,7 @@ require 'numo/sparse/base'
 module Numo
   module Sparse
     class CSR < BaseTensor
-      attr_reader :shape, :dtype, :data, :indptr, :indices, :coords, :matrix
+      attr_reader :shape, :dtype, :data, :indptr, :indices
       
       def self.max_ndim
         2
@@ -17,8 +17,7 @@ module Numo
         @shape = check_shape(narray.shape).dup.freeze
         @dtype = narray.class
         @data = narray[narray.ne(0)]
-        @coords = make_coords(narray) #####
-        @matrix = to_matrix(narray)
+        make_csr(narray)
       end
 
       private def initialize_empty(shape, dtype)
@@ -27,7 +26,7 @@ module Numo
         @data = []
       end
       
-      private def make_coords(narray)
+      private def make_csr(narray)
         row_limit, col_limit, matrix, curr_row, count = 
         shape[0], shape[1], narray, 0, 0
         indices = []
@@ -45,31 +44,8 @@ module Numo
           indptr.push(count) 
           curr_row += 1
         end
-        [data, indices, indptr]
-      end
-      
-      private def to_matrix(coords)
-        matrix = Numo::DFloat.zeros(shape)
-     
-        data, indices, indptr = 
-        coords[0], coords[1], coords[2]
-        
-        t, a, c, d, tempor, i = 
-        0, 0, 0, 0, 0, 1
-
-        while t < (indptr.size - 1)
-          tempor = (indptr[i] - indptr[i-1])
-          while a < tempor
-              matrix[t][indices[c]] = data[d]
-              c += 1
-              d += 1
-              a += 1
-          end
-          i += 1
-          t += 1
-          a = 0
-        end
-      [matrix]
+        @indices = Numo::Int32[*indices]
+        @indptr = Numo::Int32[*indptr]
       end
     end
   end
