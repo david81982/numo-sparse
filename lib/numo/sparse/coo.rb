@@ -80,6 +80,13 @@ module Numo
         end
         matrix
       end
+
+      def transpose()
+        temp = []
+        temp = self.columb
+        self.columb = self.row
+        self.row = temp
+      end
     end
   end
 end

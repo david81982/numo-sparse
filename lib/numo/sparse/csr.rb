@@ -67,6 +67,20 @@ module Numo
         end
         matrix
       end
+
+      def transpose()
+        trans = Numo::Sparse::CSC.new(self.to_narray)
+        @data = Numo.class[trans.data]
+        @indices = Numo::Int32[trans.indices]
+        @indptr = Numo::Int32[trans.indptr]
+        ###What if we just added the col in the original funct
+        ###and we just store it for the transpose so all we have to 
+        ###do is reassign indices
+      end
+
+      def to_csr
+        self.make_csr()
+      end
     end
   end
 end
