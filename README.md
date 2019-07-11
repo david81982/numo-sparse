@@ -7,8 +7,6 @@ In this directory, you'll find the files you need to be able to package up your 
 
 TODO: Delete this and the text above, and describe your gem
 
-TODO: change name of profile as it is currently the forked numo-sparse
-
 ## Installation
 
 Add this line to your application's Gemfile:
