@@ -38,6 +38,7 @@ class TestSparseCSC < Test::Unit::TestCase
                      csc.nnz)
       end
     end
+
     sub_test_case("with Numo::NArray object") do
       test("with 2D array") do
         nary = Numo::DFloat[[1, 0, 2], [0, 3, 0], [4, 0, 5]]
@@ -56,22 +57,28 @@ class TestSparseCSC < Test::Unit::TestCase
       test("with 2D array and coords") do
         naray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
         csc = Numo::Sparse::CSC.new(naray)
-      
+
         assert_equal([3, 3],
                      csc.shape)
         assert_equal(2,
                      csc.ndim)
         assert_equal(6,
                      csc.nnz)
-        assert_equal([1, 2, 3, 4, 5, 6], 
-                     csc.data_csc)
-        assert_equal([
-                       Numo::DFloat[1, 2, 3, 4, 5, 6],
-                       [0, 2, 2, 0, 1, 2],
-                       [0, 2, 3, 6]
-                       ],
-                    csc.coords)
-   end
+        assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6], 
+                     csc.data)
+        assert_equal(Numo::Int32[0, 2, 2, 0, 1, 2], 
+                     csc.indices)
+        assert_equal(Numo::Int32[0, 2, 3, 6], 
+                     csc.indptr)
+      end
+    end
+    sub_test_case("with Numo::NArray object") do
+        test("conversion from csc to narray") do
+          narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
+          csc = Numo::Sparse::CSC.new(narray)
+          assert_equal(narray,
+                     csc.to_narray)
+      end
+    end
   end
- end
 end
