@@ -62,8 +62,9 @@ class TestSparseCSR < Test::Unit::TestCase
     sub_test_case("with Numo::NArray object") do
         test("conversion from csr to narray") do
           naray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
+          csr = Numo::Sparse::CSR.new(naray)
           assert_equal(naray,
-                     (Numo::Sparse::CSR.new(naray)).to_narray)
+                     csr.to_narray)
       end
     end
   end
