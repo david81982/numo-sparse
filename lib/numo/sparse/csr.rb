@@ -79,7 +79,7 @@ module Numo
       end
 
       def to_csr
-        self.make_csr()
+        self
       end
     end
   end

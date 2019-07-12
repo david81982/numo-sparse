@@ -81,7 +81,7 @@ module Numo
       end
 
       def to_csc
-        self.make_csc()
+        self
       end
     end
   end
