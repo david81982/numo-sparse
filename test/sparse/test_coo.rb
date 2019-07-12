@@ -84,5 +84,6 @@ class TestSparseCOO < Test::Unit::TestCase
                      Numo::Sparse::COO.new(narray).to_narray)
       end
     end
+
   end
 end

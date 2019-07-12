@@ -56,7 +56,7 @@ module Numo
         while row < (indptr.size - 1)
           row_lim = (indptr[curr_ptr] - indptr[curr_ptr-1])
           while current < row_lim
-            matrix[row][indices[curr_ind]] = data[curr_data]
+            matrix[row, indices[curr_ind]] = data[curr_data]
             curr_ind += 1
             curr_data += 1
             current += 1
