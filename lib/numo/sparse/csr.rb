@@ -18,8 +18,6 @@ module Numo
         @dtype = narray.class
         @data = narray[narray.ne(0)]
         make_csr(narray)
-        to_narray()
-        transpose()
       end
 
       private def initialize_empty(shape, dtype)
@@ -54,13 +52,13 @@ module Numo
       end
 
       def to_narray()
-        matrix = data.class.zeros(shape)
+        narray = data.class.zeros(shape)
         row, row_lim, curr_ind = 0, 0, 0
         curr_data, current, curr_ptr = 0, 0, 1
         while row < (indptr.size - 1)
           row_lim = (indptr[curr_ptr] - indptr[curr_ptr-1])
           while current < row_lim
-            matrix[row, indices[curr_ind]] = data[curr_data]
+            narray[row, indices[curr_ind]] = data[curr_data]
             curr_ind += 1
             curr_data += 1
             current += 1
@@ -69,28 +67,11 @@ module Numo
           row += 1
           current = 0
         end
-        matrix
+        narray
       end
 
       def transpose()
-        temp = Numo::Int32[]
-        temp = indices
-        indices = indices_temp
-        indices_temp = temp
-=begin
-        trans = Numo::Sparse::CSC.new(self.to_narray)
-        @data = Numo.class[trans.data]
-        @indices = Numo::Int32[trans.indices]
-        @indptr = Numo::Int32[trans.indptr]
-        ###What if we just added the col in the original funct
-        ###and we just store it for the transpose so all we have to 
-        ###do is reassign indices
-=end
-        #indices
-      end
-
-      def to_csr
-        self
+        [data, indices_temp, indptr]
       end
     end
   end

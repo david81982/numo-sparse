@@ -70,10 +70,10 @@ class TestSparseCSR < Test::Unit::TestCase
     sub_test_case("with Numo::NArray object") do
         test("transpose of csr") do
           narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
-          trans_indices = Numo::Int32[0, 0, 1, 2, 2, 2]
-          csr = Numo::Sparse::CSR.new(narray).transpose
-          assert_equal(trans_indices,
-                     csr.indices)
+          trans = [Numo::DFloat[1, 2, 3, 4, 5, 6], Numo::Int32[0, 0, 1, 2, 2, 2], Numo::Int32[0, 2, 3, 6]]
+          csr = Numo::Sparse::CSR.new(narray)
+          assert_equal(trans,
+                     csr.transpose)
       end
     end
   end
