@@ -57,7 +57,7 @@ class TestSparseCOO < Test::Unit::TestCase
                      coo.coords)
       end
     end
-
+=begin
     sub_test_case("with Numo::NArray object") do
         test("conversion from coo to narray in 2D") do
           narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
@@ -84,5 +84,6 @@ class TestSparseCOO < Test::Unit::TestCase
                      Numo::Sparse::COO.new(narray).to_narray)
       end
     end
+=end
   end
 end

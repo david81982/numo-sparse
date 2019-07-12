@@ -3,7 +3,7 @@ require 'numo/sparse/base'
 module Numo
   module Sparse
     class CSR < BaseTensor
-      attr_reader :shape, :dtype, :data, :indptr, :indices
+      attr_reader :shape, :dtype, :data, :indptr, :indices, :indices_temp
 
       def self.max_ndim
         2
@@ -19,6 +19,7 @@ module Numo
         @data = narray[narray.ne(0)]
         make_csr(narray)
         to_narray()
+        transpose()
       end
 
       private def initialize_empty(shape, dtype)
@@ -31,6 +32,7 @@ module Numo
         row_limit, col_limit = shape[0], shape[1]
         matrix, curr_row, count = narray, 0, 0
         indices = []
+        indices_temp = [] #this is for the transpose
         indptr = []
         indptr[0] = 0
         while curr_row < row_limit
@@ -39,6 +41,7 @@ module Numo
             if matrix[curr_row,curr_col] != 0
               count += 1
               indices.push(curr_col)
+              indices_temp.push(curr_row)
             end
             curr_col += 1
           end
@@ -46,6 +49,7 @@ module Numo
           curr_row += 1
         end
         @indices = Numo::Int32[*indices]
+        @indices_temp = Numo::Int32[*indices_temp]
         @indptr = Numo::Int32[*indptr]
       end
 
@@ -56,7 +60,7 @@ module Numo
         while row < (indptr.size - 1)
           row_lim = (indptr[curr_ptr] - indptr[curr_ptr-1])
           while current < row_lim
-            matrix[row][indices[curr_ind]] = data[curr_data]
+            matrix[row, indices[curr_ind]] = data[curr_data]
             curr_ind += 1
             curr_data += 1
             current += 1
@@ -69,6 +73,11 @@ module Numo
       end
 
       def transpose()
+        temp = Numo::Int32[]
+        temp = indices
+        indices = indices_temp
+        indices_temp = temp
+=begin
         trans = Numo::Sparse::CSC.new(self.to_narray)
         @data = Numo.class[trans.data]
         @indices = Numo::Int32[trans.indices]
@@ -76,6 +85,8 @@ module Numo
         ###What if we just added the col in the original funct
         ###and we just store it for the transpose so all we have to 
         ###do is reassign indices
+=end
+        #indices
       end
 
       def to_csr
