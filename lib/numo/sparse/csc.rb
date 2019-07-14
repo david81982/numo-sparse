@@ -49,6 +49,25 @@ module Numo
         @indices = Numo::Int32[*indices]
         @indptr = Numo::Int32[*indptr]
       end
+
+      def to_narray()
+        narray = data.class.zeros(shape)
+        col, current, curr_ind = 0, 0, 0
+        curr_data, col_lim, curr_ptr = 0, 0, 1
+        while col < (indptr.size - 1)
+          col_lim = (indptr[curr_ptr] - indptr[curr_ptr-1])
+          while current < col_lim
+            narray[indices[curr_ind], col] = data[curr_data]
+            curr_ind += 1
+            curr_data += 1
+            current += 1
+          end
+          curr_ptr += 1
+          col += 1
+          current = 0
+        end
+        narray
+      end
     end
   end
 end
