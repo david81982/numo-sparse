@@ -29,7 +29,6 @@ module Numo
         row_limit, col_limit = shape[0], shape[1]
         curr_col, count = 0, 0
         indices = []
-        indices = []
         indices_temp = [] #this is for the transpose
         indptr = []
         data = []
