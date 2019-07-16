@@ -57,7 +57,7 @@ module Numo
           count, curr_data, curr_col, curr_row = 0, 0, 0, 0
           row, columb = coords[0], coords[1]
           while count < data.size
-            matrix[row[curr_row], columb[curr_col]] = data[curr_data] ###fix row&columb
+            matrix[row[curr_row], columb[curr_col]] = data[curr_data]
             count += 1
             curr_data += 1
             curr_row += 1
@@ -66,11 +66,14 @@ module Numo
         matrix
       end
 
-      def transpose()
+      def transpose() #This might work for more than 3D
         temp = []
-        temp = self.coords[0]
-        self.coords[0] = self.coords[1]
-        self.coords[1] = temp
+        i = ndim
+        if i > 1
+          temp = self.coords[i-2]
+          self.coords[i-2] = self.coords[i-1]
+          self.coords[i-1] = temp
+        end
         [coords[0], coords[1], coords[2]]
       end
     end

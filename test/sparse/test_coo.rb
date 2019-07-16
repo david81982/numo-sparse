@@ -58,7 +58,6 @@ class TestSparseCOO < Test::Unit::TestCase
       end
     end
 
-#This is only with 2D
     sub_test_case("with Numo::NArray object") do
       test("conversion from coo to narray in 2D") do
         narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
@@ -84,9 +83,9 @@ class TestSparseCOO < Test::Unit::TestCase
                            ]
         coo = Numo::Sparse::COO.new(narray)
         assert_equal([
-                       [0, 0, 1, 1, 2, 2, 0, 0, 1, 1, 2, 2],
                        [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
-                       [0, 1, 1, 3, 0, 3, 1, 2, 0, 2, 0, 2]
+                       [0, 1, 1, 3, 0, 3, 1, 2, 0, 2, 0, 2],
+                       [0, 0, 1, 1, 2, 2, 0, 0, 1, 1, 2, 2]
                      ],
                      coo.transpose)
       end

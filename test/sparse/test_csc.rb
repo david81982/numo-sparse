@@ -91,5 +91,35 @@ class TestSparseCSC < Test::Unit::TestCase
                      csc.transpose)
       end
     end
+    
+    sub_test_case("with Numo::NArray object") do
+        test("get col of csc") do
+          narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
+          col = Numo::Int32[0, 0, 1, 2, 2, 2]
+          csc = Numo::Sparse::CSC.new(narray)
+          assert_equal(col,
+                     csc.get_col)
+      end
+    end
+    
+    sub_test_case("with Numo::NArray object") do
+        test("get row of csc") do
+          narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
+          row = Numo::Int32[0, 2, 2, 0, 1, 2]
+          csc = Numo::Sparse::CSC.new(narray)
+          assert_equal(row,
+                     csc.get_row)
+      end
+    end
+    
+    sub_test_case("with Numo::NArray object") do
+        test("CSC to CSR") do
+          narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
+          trans = [Numo::DFloat[1, 2, 3, 4, 5, 6], Numo::Int32[0, 0, 1, 2, 2, 2], Numo::Int32[0, 2, 3, 6]]
+          csc = Numo::Sparse::CSC.new(narray)
+          assert_equal(trans,
+                     csc.to_csr)
+      end
+    end
   end
 end

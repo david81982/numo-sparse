@@ -75,6 +75,18 @@ module Numo
       def transpose()
         [data, indices_temp, indptr]
       end
+      
+      def get_col()
+        indices_temp
+      end
+      
+      def get_row()
+        indices
+      end
+      
+      def to_csr()
+        [data, indices_temp, indptr]
+      end
     end
   end
 end
