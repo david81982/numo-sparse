@@ -40,7 +40,7 @@ class TestSparseCSR < Test::Unit::TestCase
     end
 
     sub_test_case("with Numo::NArray object") do
-      test("with 2D array and coords") do
+      test("create data/indices/indptr") do
         naray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
         csr = Numo::Sparse::CSR.new(naray)
             
@@ -50,60 +50,90 @@ class TestSparseCSR < Test::Unit::TestCase
                      csr.ndim)
         assert_equal(6,
                      csr.nnz)
-        assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6], 
+        assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6],
                      csr.data)
-        assert_equal(Numo::Int32[0, 2, 2, 0, 1, 2], 
+        assert_equal(Numo::Int32[0, 2, 2, 0, 1, 2],
                      csr.indices)
-        assert_equal(Numo::Int32[0, 2, 3, 6], 
+        assert_equal(Numo::Int32[0, 2, 3, 6],
                      csr.indptr)
       end
     end
 
+#this is new
     sub_test_case("with Numo::NArray object") do
         test("conversion from csr to narray") do
           naray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
+          csr = Numo::Sparse::CSR.new(naray)
           assert_equal(naray,
-                     (Numo::Sparse::CSR.new(naray)).to_narray)
+                     csr.to_narray)
       end
     end
 
+#this is new
     sub_test_case("with Numo::NArray object") do
         test("transpose of csr") do
           narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
-          trans = [Numo::DFloat[1, 2, 3, 4, 5, 6], Numo::Int32[0, 0, 1, 2, 2, 2], Numo::Int32[0, 2, 3, 6]]
-          csr = Numo::Sparse::CSR.new(narray)
-          assert_equal(trans,
-                     csr.transpose)
+          csr = Numo::Sparse::CSR.new(narray).transpose
+
+          assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6],
+                     csr.data)
+          assert_equal(Numo::Int32[0, 0, 1, 2, 2, 2],
+                     csr.indices)
+          assert_equal(Numo::Int32[0, 2, 3, 6],
+                     csr.indptr)
       end
     end
-    
+
+#this is new
     sub_test_case("with Numo::NArray object") do
         test("get col of csr") do
           narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
-          col = Numo::Int32[0, 2, 2, 0, 1, 2]
-          csr = Numo::Sparse::CSR.new(narray)
-          assert_equal(col,
-                     csr.get_col)
+          csr = Numo::Sparse::CSR.new(narray).get_col(1)
+          assert_equal(Numo::DFloat[5],
+                     csr.data)
+          assert_equal(Numo::Int32[0],
+                     csr.indices)
+          assert_equal(Numo::Int32[0, 0, 0, 1],
+                     csr.indptr)
       end
     end
-    
+
+#this is new
     sub_test_case("with Numo::NArray object") do
         test("get row of csr") do
           narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
-          row = Numo::Int32[0, 0, 1, 2, 2, 2]
-          csr = Numo::Sparse::CSR.new(narray)
-          assert_equal(row,
-                     csr.get_row)
+          csr = Numo::Sparse::CSR.new(narray).get_row(1)
+          assert_equal(Numo::DFloat[3],
+                     csr.data)
+          assert_equal(Numo::Int32[2],
+                     csr.indices)
+          assert_equal(Numo::Int32[0, 1],
+                     csr.indptr)
       end
     end
-    
+
+#this is new
     sub_test_case("with Numo::NArray object") do
         test("CSR to CSC") do
           narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
-          trans = [Numo::DFloat[1, 2, 3, 4, 5, 6], Numo::Int32[0, 0, 1, 2, 2, 2], Numo::Int32[0, 2, 3, 6]]
-          csr = Numo::Sparse::CSR.new(narray)
-          assert_equal(trans,
-                     csr.to_csc)
+          csr = Numo::Sparse::CSR.new(narray).to_csc
+          
+          assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6],
+                     csr.data)
+          assert_equal(Numo::Int32[0, 0, 1, 2, 2, 2],
+                     csr.indices)
+          assert_equal(Numo::Int32[0, 2, 3, 6],
+                     csr.indptr)
+      end
+    end
+
+#this is new
+    sub_test_case("with Numo::NArray object") do
+      test("scalar multiplication") do
+        narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
+        csr = (Numo::Sparse::CSR.new(narray)) * 2
+        assert_equal(Numo::DFloat[2, 4, 6, 8, 10, 12],
+                     csr.data)
       end
     end
   end

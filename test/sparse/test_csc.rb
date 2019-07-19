@@ -54,7 +54,7 @@ class TestSparseCSC < Test::Unit::TestCase
     end
 
     sub_test_case("with Numo::NArray object") do
-      test("with 2D array and coords") do
+      test("create data/indices/indptr") do
         naray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
         csc = Numo::Sparse::CSC.new(naray)
 
@@ -64,15 +64,16 @@ class TestSparseCSC < Test::Unit::TestCase
                      csc.ndim)
         assert_equal(6,
                      csc.nnz)
-        assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6], 
+        assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6],
                      csc.data)
-        assert_equal(Numo::Int32[0, 2, 2, 0, 1, 2], 
+        assert_equal(Numo::Int32[0, 2, 2, 0, 1, 2],
                      csc.indices)
-        assert_equal(Numo::Int32[0, 2, 3, 6], 
+        assert_equal(Numo::Int32[0, 2, 3, 6],
                      csc.indptr)
       end
     end
 
+#this is new
     sub_test_case("with Numo::NArray object") do
         test("conversion from csc to narray") do
           narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
@@ -82,43 +83,69 @@ class TestSparseCSC < Test::Unit::TestCase
       end
     end
 
+#this is new
     sub_test_case("with Numo::NArray object") do
         test("transpose of csc") do
           narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
-          trans = [Numo::DFloat[1, 2, 3, 4, 5, 6], Numo::Int32[0, 0, 1, 2, 2, 2], Numo::Int32[0, 2, 3, 6]]
-          csc = Numo::Sparse::CSC.new(narray)
-          assert_equal(trans,
-                     csc.transpose)
+          csc = Numo::Sparse::CSC.new(narray).transpose
+          assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6],
+                     csc.data)
+          assert_equal(Numo::Int32[0, 0, 1, 2, 2, 2],
+                     csc.indices)
+          assert_equal(Numo::Int32[0, 2, 3, 6],
+                     csc.indptr)
       end
     end
-    
+
+#this is new
     sub_test_case("with Numo::NArray object") do
         test("get col of csc") do
           narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
-          col = Numo::Int32[0, 0, 1, 2, 2, 2]
-          csc = Numo::Sparse::CSC.new(narray)
-          assert_equal(col,
-                     csc.get_col)
+          csc = Numo::Sparse::CSC.new(narray).get_col(1)
+          assert_equal(Numo::DFloat[3],
+                     csc.data)
+          assert_equal(Numo::Int32[2],
+                     csc.indices)
+          assert_equal(Numo::Int32[0, 1],
+                     csc.indptr)
       end
     end
-    
+
+#this is new
     sub_test_case("with Numo::NArray object") do
         test("get row of csc") do
           narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
-          row = Numo::Int32[0, 2, 2, 0, 1, 2]
-          csc = Numo::Sparse::CSC.new(narray)
-          assert_equal(row,
-                     csc.get_row)
+          csc = Numo::Sparse::CSC.new(narray).get_row(1)
+          assert_equal(Numo::DFloat[5],
+                     csc.data)
+          assert_equal(Numo::Int32[0],
+                     csc.indices)
+          assert_equal(Numo::Int32[0, 0, 0, 1],
+                     csc.indptr)
       end
     end
-    
+
+#this is new
     sub_test_case("with Numo::NArray object") do
         test("CSC to CSR") do
           narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
-          trans = [Numo::DFloat[1, 2, 3, 4, 5, 6], Numo::Int32[0, 0, 1, 2, 2, 2], Numo::Int32[0, 2, 3, 6]]
-          csc = Numo::Sparse::CSC.new(narray)
-          assert_equal(trans,
-                     csc.to_csr)
+          csc = Numo::Sparse::CSC.new(narray).to_csr
+          assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6],
+                     csc.data)
+          assert_equal(Numo::Int32[0, 0, 1, 2, 2, 2],
+                     csc.indices)
+          assert_equal(Numo::Int32[0, 2, 3, 6],
+                     csc.indptr)
+      end
+    end
+
+#this is new
+    sub_test_case("with Numo::NArray object") do
+      test("scalar multiplication") do
+        narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
+        csc = (Numo::Sparse::CSC.new(narray))*2
+        assert_equal(Numo::DFloat[2, 4, 6, 8, 10, 12],
+                     csc.data)
       end
     end
   end
