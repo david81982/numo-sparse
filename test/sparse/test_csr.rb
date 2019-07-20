@@ -103,6 +103,7 @@ class TestSparseCSR < Test::Unit::TestCase
         test("get row of csr") do
           narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
           csr = Numo::Sparse::CSR.new(narray).get_row(1)
+
           assert_equal(Numo::DFloat[3],
                      csr.data)
           assert_equal(Numo::Int32[2],
@@ -134,6 +135,24 @@ class TestSparseCSR < Test::Unit::TestCase
         csr = (Numo::Sparse::CSR.new(narray)) * 2
         assert_equal(Numo::DFloat[2, 4, 6, 8, 10, 12],
                      csr.data)
+      end
+    end
+
+    #this is new
+    sub_test_case("with Numo::NArray object") do
+      test("matrix multiplication") do
+        narray = Numo::DFloat[[1, 0, 1], [1, 1, 1], [0, 0, 1]]
+        narray1 = Numo::DFloat[[2, 2, 0], [0, 0, 2], [0, 0, 0]]
+        csr = Numo::Sparse::CSR.new(narray)
+        csr1 = Numo::Sparse::CSR.new(narray1)
+        csr2 = csr.multiply(csr1)
+          
+          assert_equal(Numo::DFloat[2, 2, 2, 2, 2],
+                     csr2.data)
+          assert_equal(Numo::Int32[0, 1, 0, 1, 2],
+                     csr2.indices)
+          assert_equal(Numo::Int32[0, 2, 5, 5],
+                     csr2.indptr)
       end
     end
   end

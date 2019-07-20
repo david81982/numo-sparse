@@ -181,6 +181,48 @@ module Numo
         new_shape = shape.dup
         CSR.new(new_data, new_indices, new_indptr, new_shape)
       end
+
+#this is new
+      # Multiplies matrix by matrix
+      # @param matrix [matrix] R
+      # @return [CSR] R
+      # @example
+      #   E
+      #   E
+      #   E
+      #   # =>
+      def multiply(matrix)
+        data1, indices1, indptr1, shape1= matrix.data, matrix.indices, matrix.indptr, matrix.shape
+        if shape[1] == shape1[0]
+          csr = self.class.new(data, indices, indptr, shape).to_narray
+          csr1 = matrix.class.new(data1, indices1, indptr1, shape1).to_narray
+          i, j, k, l, m, n, p = 0, 0, 0, 0, 0, 0, 0
+          shape2 = [shape[0], shape1[1]]
+          narray = data.class.zeros(shape2)
+          until i == shape[0] do
+            until j == shape1[1]do
+              until l == shape1[0] do
+                p += (csr[k, l] * csr1[m, n])
+                l += 1
+                m += 1
+              end
+              narray[i, j] = p
+              j += 1
+              n += 1
+              p = 0
+              l = 0
+              m = 0
+            end
+            j = 0
+            n = 0
+            k += 1
+            i += 1
+          end
+          CSR.new(narray)
+        else
+        p "Unable to perform matrix multiplication"
+        end
+      end
     end
   end
 end
