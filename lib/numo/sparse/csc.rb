@@ -71,6 +71,7 @@ module Numo
         @indptr = Numo::Int32[*indptr]
       end
 
+
 #this is new
       # Converts the sparse matrix into a normal array
       # @return [matrix] the matrix from CSC
@@ -98,6 +99,7 @@ module Numo
         narray
       end
 
+=begin
 #this is new
       # Returns the transpose of the CSC matrix
       # @return [CSC] transposed matrix in CSC format
@@ -153,6 +155,7 @@ module Numo
         end
         CSC.new(result)
       end
+=end
 
 #this is new
       # Converts CSC matrix into CSR
@@ -166,6 +169,7 @@ module Numo
         CSR.new(data, indices_temp, indptr, shape)
       end
 
+=begin
 #this is new
       # Multiplies matrix by scalar
       # @param scalar [scalar] amount that the matrix will be multiplied by
@@ -182,6 +186,7 @@ module Numo
         new_shape = shape.dup
         CSC.new(new_data, new_indices, new_indptr, new_shape)
       end
+=end
     end
   end
 end

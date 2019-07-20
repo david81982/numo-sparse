@@ -97,6 +97,7 @@ module Numo
         narray
       end
 
+=begin
 #this is new
       # Returns the transpose of the CSR matrix
       # @return [CSR] transposed matrix in CSR format
@@ -106,7 +107,7 @@ module Numo
       #   csr.transpose
       #   # => indices => Numo::Int32[0, 0, 1, 2, 2, 2]
       def transpose()
-        CSR.new(data, indices_temp, indptr, shape)
+        self.class.new(data, indices_temp, indptr, shape)
       end
 
 #this is new
@@ -120,7 +121,7 @@ module Numo
       #   # => data => [5], indices => [0], indptr => [0, 0, 0, 1]
       def get_col(col)
         max_rows, curr_row, col = shape[0], 0, col
-        matrix = CSR.new(data, indices, indptr, shape).to_narray
+        matrix = self.class.new(data, indices, indptr, shape).to_narray
         result = data.class.zeros([max_rows, 1])
         until curr_row == max_rows do
           if matrix[curr_row, col] != 0
@@ -128,7 +129,7 @@ module Numo
           end
           curr_row += 1
         end
-        CSR.new(result)
+        self.class.new(result)
       end
 
 #this is new
@@ -142,7 +143,7 @@ module Numo
       #   # => data => [3], indices => [2], indptr => [0, 1]
       def get_row(row)
         max_col, curr_col, row = shape[1], 0, row
-        matrix = CSR.new(data, indices, indptr, shape).to_narray
+        matrix = self.class.new(data, indices, indptr, shape).to_narray
         result = data.class.zeros([1, max_col])
         until curr_col == max_col do
           if matrix[row, curr_col] != 0
@@ -150,8 +151,9 @@ module Numo
           end
           curr_col += 1
         end
-        CSR.new(result)
+        self.class.new(result)
       end
+=end
 
 #this is new
       # Converts CSR matrix into CSC
@@ -165,10 +167,11 @@ module Numo
         CSC.new(data, indices_temp, indptr, shape)
       end
 
+=begin
 #this is new
       # Multiplies matrix by scalar
       # @param scalar [scalar] amount that the matrix will be multiplied by
-      # @return [CSR] creates the new multiplied csr matrix
+      # @return [sparse matrix] creates the new multiplied sparse matrix
       # @example
       #   narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
       #   csr = Numo::Sparse::CSR.new(narray)
@@ -179,50 +182,51 @@ module Numo
         new_indices = indices.dup
         new_indptr = indptr.dup
         new_shape = shape.dup
-        CSR.new(new_data, new_indices, new_indptr, new_shape)
+        self.class.new(new_data, new_indices, new_indptr, new_shape)
       end
 
 #this is new
       # Multiplies matrix by matrix
-      # @param matrix [matrix] R
-      # @return [CSR] R
+      # @param matrix [sparse matrix] used to mulitiply original matrix
+      # @return [Sparse matrix] returns multiplied matrix
       # @example
-      #   E
-      #   E
-      #   E
-      #   # =>
+      #   csr = Numo::Sparse::CSR.new(Numo::DFloat[[1, 0, 1], [1, 1, 1], [0, 0, 1]])
+      #   csc = Numo::Sparse::CSC.new(Numo::DFloat[[2, 2, 0], [0, 0, 2], [0, 0, 0]])
+      #   csr2 = csr.multiply(csc)
+      #   # => data => [2, 2, 2, 2, 2], indices => [0, 1, 0, 1, 2], indptr => [0, 2, 5, 5]
       def multiply(matrix)
         data1, indices1, indptr1, shape1= matrix.data, matrix.indices, matrix.indptr, matrix.shape
         if shape[1] == shape1[0]
-          csr = self.class.new(data, indices, indptr, shape).to_narray
-          csr1 = matrix.class.new(data1, indices1, indptr1, shape1).to_narray
-          i, j, k, l, m, n, p = 0, 0, 0, 0, 0, 0, 0
+          matrix1 = self.class.new(data, indices, indptr, shape).to_narray
+          matrix2 = matrix.class.new(data1, indices1, indptr1, shape1).to_narray
+          new_row, new_col, matrix_row, matrix_col, matrix1_row, matrix1_col, new_matrix_data = 0, 0, 0, 0, 0, 0, 0
           shape2 = [shape[0], shape1[1]]
           narray = data.class.zeros(shape2)
-          until i == shape[0] do
-            until j == shape1[1]do
-              until l == shape1[0] do
-                p += (csr[k, l] * csr1[m, n])
-                l += 1
-                m += 1
+          until new_row == shape[0] do
+            until new_col == shape1[1]do
+              until matrix_col == shape1[0] do
+                new_matrix_data += (matrix1[matrix_row, matrix_col] * matrix2[matrix1_row, matrix1_col])
+                matrix_col += 1
+                matrix1_row += 1
               end
-              narray[i, j] = p
-              j += 1
-              n += 1
-              p = 0
-              l = 0
-              m = 0
+              narray[new_row, new_col] = new_matrix_data
+              new_col += 1
+              matrix1_col += 1
+              new_matrix_data = 0
+              matrix_col = 0
+              matrix1_row = 0
             end
-            j = 0
-            n = 0
-            k += 1
-            i += 1
+            new_col = 0
+            matrix1_col = 0
+            matrix_row += 1
+            new_row += 1
           end
-          CSR.new(narray)
+          self.class.new(narray)
         else
         p "Unable to perform matrix multiplication"
         end
       end
+=end
     end
   end
 end

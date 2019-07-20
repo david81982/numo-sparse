@@ -138,14 +138,14 @@ class TestSparseCSR < Test::Unit::TestCase
       end
     end
 
-    #this is new
+#this is new
     sub_test_case("with Numo::NArray object") do
       test("matrix multiplication") do
         narray = Numo::DFloat[[1, 0, 1], [1, 1, 1], [0, 0, 1]]
         narray1 = Numo::DFloat[[2, 2, 0], [0, 0, 2], [0, 0, 0]]
         csr = Numo::Sparse::CSR.new(narray)
-        csr1 = Numo::Sparse::CSR.new(narray1)
-        csr2 = csr.multiply(csr1)
+        csc = Numo::Sparse::CSC.new(narray1)
+        csr2 = csr.multiply(csc)
           
           assert_equal(Numo::DFloat[2, 2, 2, 2, 2],
                      csr2.data)
