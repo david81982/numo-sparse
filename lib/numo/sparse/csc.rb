@@ -3,7 +3,16 @@ require 'numo/sparse/base'
 module Numo
   module Sparse
     class CSC < BaseTensor
-      attr_reader :shape, :dtype, :data, :indptr, :indices
+      attr_reader :shape, :dtype, :data, :indptr, :indices, :indices_temp
+
+      def initialize(*args)
+        if args.length == 4
+          @data, @indices, @indptr, @shape = args
+          @dtype = data.class
+        else
+          super
+        end
+      end
 
       def self.max_ndim
         2
