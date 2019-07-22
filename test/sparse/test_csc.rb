@@ -72,5 +72,6 @@ class TestSparseCSC < Test::Unit::TestCase
                      csc.indptr)
       end
     end
+
   end
 end

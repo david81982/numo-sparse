@@ -3,7 +3,16 @@ require 'numo/sparse/base'
 module Numo
   module Sparse
     class CSC < BaseTensor
-      attr_reader :shape, :dtype, :data, :indptr, :indices
+      attr_reader :shape, :dtype, :data, :indptr, :indices, :indices_temp
+
+      def initialize(*args)
+        if args.length == 4
+          @data, @indices, @indptr, @shape = args
+          @dtype = data.class
+        else
+          super
+        end
+      end
 
       def self.max_ndim
         2
@@ -25,10 +34,19 @@ module Numo
         @data = []
       end
 
+      # Creates the sparse matrix in csc format
+      # @param narray [narray] the matrix that will be converted
+      # @return [array] the converted matrix in csc format
+      # @example
+      #   narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
+      #   csc = Numo::Sparse::CSC.new(naray)
+      #   csc.indices
+      #   # => [0, 2, 2, 0, 1, 2]
       private def make_csc(narray)
         row_limit, col_limit = shape[0], shape[1]
         curr_col, count = 0, 0
         indices = []
+        indices_temp = [] #this is for the transpose
         indptr = []
         data = []
         indptr[0] = 0
@@ -38,6 +56,7 @@ module Numo
             if narray[curr_row, curr_col] != 0
               count += 1
               indices.push(curr_row)
+              indices_temp.push(curr_col)
               data.push(narray[curr_row, curr_col])
             end
             curr_row += 1
@@ -47,6 +66,7 @@ module Numo
         end
         @data = narray.class[*data]
         @indices = Numo::Int32[*indices]
+        @indices_temp = Numo::Int32[*indices_temp]
         @indptr = Numo::Int32[*indptr]
       end
     end

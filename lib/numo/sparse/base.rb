@@ -37,6 +37,14 @@ module Numo
         return dtype if dtype < Numo::NArray
         raise ArgumentError, "Invalid dtype: #{dtype}"
       end
+
+      def *(scalar)
+        new_data = data * scalar
+        new_indices = indices.dup
+        new_indptr = indptr.dup
+        new_shape = shape.dup
+        self.class.new(new_data, new_indices, new_indptr, new_shape)
+      end
     end
   end
 end
