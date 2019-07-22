@@ -73,5 +73,13 @@ class TestSparseCSC < Test::Unit::TestCase
       end
     end
 
+    sub_test_case("with Numo::NArray object") do
+      test("scalar multiplication") do
+        narray = Numo::DFloat[[1, 0, 4], [0, 0, 5], [2, 3, 6]]
+        csc = (Numo::Sparse::CSC.new(narray))*2
+        assert_equal(Numo::DFloat[2, 4, 6, 8, 10, 12],
+                     csc.data)
+      end
+    end
   end
 end
