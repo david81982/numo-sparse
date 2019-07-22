@@ -38,6 +38,14 @@ module Numo
         raise ArgumentError, "Invalid dtype: #{dtype}"
       end
 
+      # Multiplies matrix by scalar
+      # @param scalar [scalar] amount that the matrix will be multiplied by
+      # @return [sparse matrix] creates the new multiplied sparse matrix
+      # @example
+      #   narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
+      #   csr = Numo::Sparse::CSR.new(narray)
+      #   csr * 2
+      #   # => data => [2, 4, 6, 8, 10, 12]
       def *(scalar)
         new_data = data * scalar
         new_indices = indices.dup
