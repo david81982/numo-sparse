@@ -38,6 +38,14 @@ module Numo
         raise ArgumentError, "Invalid dtype: #{dtype}"
       end
 
+      # Multiplies matrix by matrix
+      # @param matrix [sparse matrix] used to mulitiply original matrix
+      # @return [Sparse matrix] returns multiplied matrix
+      # @example
+      #   csr = Numo::Sparse::CSR.new(Numo::DFloat[[1, 0, 1], [1, 1, 1], [0, 0, 1]])
+      #   csc = Numo::Sparse::CSC.new(Numo::DFloat[[2, 2, 0], [0, 0, 2], [0, 0, 0]])
+      #   csr2 = csr.multiply(csc)
+      #   # => data => [2, 2, 2, 2, 2], indices => [0, 1, 0, 1, 2], indptr => [0, 2, 5, 5]
       def multiply(matrix)
         data1, indices1, indptr1, shape1= matrix.data, matrix.indices, matrix.indptr, matrix.shape
         if shape[1] == shape1[0]
