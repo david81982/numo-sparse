@@ -59,5 +59,18 @@ class TestSparseCSR < Test::Unit::TestCase
       end
     end
 
+    sub_test_case("with Numo::NArray object") do
+        test("CSR to CSC") do
+          narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
+          csr = Numo::Sparse::CSR.new(narray).to_csc
+          
+          assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6],
+                     csr.data)
+          assert_equal(Numo::Int32[0, 0, 1, 2, 2, 2],
+                     csr.indices)
+          assert_equal(Numo::Int32[0, 2, 3, 6],
+                     csr.indptr)
+      end
+    end
   end
 end
