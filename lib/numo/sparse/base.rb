@@ -37,6 +37,19 @@ module Numo
         return dtype if dtype < Numo::NArray
         raise ArgumentError, "Invalid dtype: #{dtype}"
       end
+
+      def get_col(col)
+        max_rows, curr_row, col = shape[0], 0, col
+        matrix = self.class.new(data, indices, indptr, shape).to_narray
+        result = data.class.zeros([max_rows, 1])
+        until curr_row == max_rows do
+          if matrix[curr_row, col] != 0
+            result[curr_row, 0] = matrix[curr_row, col]
+          end
+          curr_row += 1
+        end
+        self.class.new(result)
+      end
     end
   end
 end
