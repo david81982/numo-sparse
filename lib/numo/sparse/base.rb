@@ -38,6 +38,13 @@ module Numo
         raise ArgumentError, "Invalid dtype: #{dtype}"
       end
 
+      # Returns the transpose of the CSR matrix
+      # @return [CSR] transposed matrix in CSR format
+      # @example
+      #   narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
+      #   csr = Numo::Sparse::CSR.new(narray)
+      #   csr.transpose
+      #   # => indices => Numo::Int32[0, 0, 1, 2, 2, 2]
       def transpose()
         self.class.new(data, indices_temp, indptr, shape)
       end
