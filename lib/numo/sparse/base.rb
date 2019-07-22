@@ -38,6 +38,14 @@ module Numo
         raise ArgumentError, "Invalid dtype: #{dtype}"
       end
 
+      # Returns the row of the CSR matrix
+      # @param row [scalar] Which row will be returned
+      # @return [CSR] Row of the matrix in CSR format
+      # @example
+      #   narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
+      #   csr = Numo::Sparse::CSR.new(narray)
+      #   csr.get_row(1)
+      #   # => data => [3], indices => [2], indptr => [0, 1]
       def get_row(row)
         max_col, curr_col, row = shape[1], 0, row
         matrix = self.class.new(data, indices, indptr, shape).to_narray
