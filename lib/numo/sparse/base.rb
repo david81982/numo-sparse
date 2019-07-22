@@ -37,6 +37,10 @@ module Numo
         return dtype if dtype < Numo::NArray
         raise ArgumentError, "Invalid dtype: #{dtype}"
       end
+
+      def transpose()
+        self.class.new(data, indices_temp, indptr, shape)
+      end
     end
   end
 end
