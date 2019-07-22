@@ -38,5 +38,6 @@ class TestSparseCSR < Test::Unit::TestCase
                      csr.nnz)
       end
     end
+
   end
 end
