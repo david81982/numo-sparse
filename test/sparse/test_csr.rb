@@ -38,5 +38,19 @@ class TestSparseCSR < Test::Unit::TestCase
                      csr.nnz)
       end
     end
+
+    sub_test_case("with Numo::NArray object") do
+        test("get row of csr") do
+          narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
+          csr = Numo::Sparse::CSR.new(narray).get_row(1)
+
+          assert_equal(Numo::DFloat[3],
+                     csr.data)
+          assert_equal(Numo::Int32[2],
+                     csr.indices)
+          assert_equal(Numo::Int32[0, 1],
+                     csr.indptr)
+      end
+    end
   end
 end
