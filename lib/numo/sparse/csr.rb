@@ -59,6 +59,13 @@ module Numo
         @indptr = Numo::Int32[*indptr]
       end
 
+      # Converts CSR matrix into CSC
+      # @return [CSC] CSC sparse matrix
+      # @example
+      #   narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
+      #   csr = Numo::Sparse::CSR.new(narray)
+      #   csr.to_csc
+      #   # => csr.class => CSC
       def to_csc()
         CSC.new(data, indices_temp, indptr, shape)
       end
