@@ -75,7 +75,7 @@ module Numo
           end
           self.class.new(narray)
         else
-        p "Unable to perform matrix multiplication"
+          raise Numo::NArray::ShapeError, "Unable to multiply matrix due to unmatched shapes"
         end
       end
     end
