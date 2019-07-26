@@ -43,7 +43,7 @@ class TestSparseCSR < Test::Unit::TestCase
       test("create data/indices/indptr") do
         naray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
         csr = Numo::Sparse::CSR.new(naray)
-            
+
         assert_equal([3, 3],
                      csr.shape)
         assert_equal(2,
@@ -59,17 +59,18 @@ class TestSparseCSR < Test::Unit::TestCase
       end
     end
 
-      sub_test_case("with Numo::NArray object") do
-        test("transpose of csr") do
-          narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
-          csr = Numo::Sparse::CSR.new(narray).transpose
+    sub_test_case("with Numo::NArray object") do
+      test("transpose of csr") do
+        narray = Numo::DFloat[[1, 0, 2], [0, 0, 3], [4, 5, 6]]
+        csr_actual = Numo::Sparse::CSR.new(narray).transpose
+        csr_expected = Numo::Sparse::CSR.new(narray.transpose)
 
-          assert_equal(Numo::DFloat[1, 2, 3, 4, 5, 6],
-                     csr.data)
-          assert_equal(Numo::Int32[0, 0, 1, 2, 2, 2],
-                     csr.indices)
-          assert_equal(Numo::Int32[0, 2, 3, 6],
-                     csr.indptr)
+        assert_equal(csr_expected.data,
+             csr_actual.data)
+        assert_equal(csr_expected.indices,
+             csr_actual.indices)
+        assert_equal(csr_expected.indptr,
+             csr_actual.indptr)
       end
     end
   end
